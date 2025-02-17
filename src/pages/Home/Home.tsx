@@ -8,7 +8,8 @@ import {UserRole} from "../../models/user.ts";
 import CreateListDialog from "./CreateListDialog/CreateListDialog.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store.ts";
-import {fetchTaskLists} from "../../store/slices/taskListSlice.ts";
+import {fetchTaskLists, fetchTasks} from "../../store/slices/taskListSlice.ts";
+import {TaskDTO, TaskListsDTO} from "../../models/taskLists.ts";
 
 const Home: React.FC = () => {
     const {user} = useAuth();
@@ -24,6 +25,7 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         dispatch(fetchTaskLists());
+        dispatch(fetchTasks())
     }, [dispatch])
 
     return (
@@ -38,13 +40,29 @@ const Home: React.FC = () => {
                         </button>
                     ) : null}
 
-                    {taskLists.map((data: any, index: any) => (
-                        <TodoListItem
-                            title={data.title}
-                            key={index}
-                        >
-                            <Todo title={"Title"} description="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga."/>
-                        </TodoListItem>
+                    {taskLists.map((data: TaskListsDTO, index: number) => (
+                        <div key={index}>
+                            {isAdmin || data.viewers.includes(user?.email) ?
+                                (
+                                    <TodoListItem
+                                        key={index}
+                                        title={data.title}
+                                        listId={data.id}
+                                    >
+                                        {data.tasks.map((task: TaskDTO, index: number) => (
+                                            <Todo
+                                                key={index}
+                                                title={task.title}
+                                                description={task.description}
+                                                listId={task.listId}
+                                                taskId={task.id}
+                                                isFinished={task.isFinished}
+                                            />
+                                        ))}
+                                    </TodoListItem>
+                                ) : null
+                            }
+                        </div>
                     ))}
                 </div>
             </div>

@@ -10,7 +10,13 @@ interface ITodoItem {
 }
 
 const TodoListItem: React.FC<ITodoItem> = ({ title, children}) => {
+    const {user} = useAuth();
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const isAdmin: boolean = user?.role === UserRole.Admin;
+
+    const handleRemoveList = (): void => {
+
+    }
 
     return (
         <div className="w-full border rounded-2xl shadow-md p-4">
@@ -32,6 +38,17 @@ const TodoListItem: React.FC<ITodoItem> = ({ title, children}) => {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
             >
+                {isAdmin ? (
+                    <div className="flex gap-2">
+                        <button type="button" className="w-full p-2 text-md text-purple-500 font-semibold border-dashed border-1 border-purple-300 rounded-lg bg-purple-100/10 mb-3 hover:bg-purple-100/50 cursor-pointer">
+                            Створити нове завдання
+                        </button>
+                        <button onClick={handleRemoveList} type="button" className="w-full p-2 text-md text-red-400 font-semibold border-dashed border-1 border-red-400 rounded-lg bg-red-100/10 mb-3 hover:bg-red-100/50 cursor-pointer">
+                            Видалити список
+                        </button>
+                    </div>
+                ) : null}
+
                 {children}
             </motion.div>
         </div>

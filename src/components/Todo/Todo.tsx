@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import Button from "../Button/Button.tsx";
 import { Edit, TrashIcon, Check } from "lucide-react";
 import {useAuth} from "../../hooks/useAuth.tsx";
 import {UserRole} from "../../models/user.ts";

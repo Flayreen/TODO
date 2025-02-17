@@ -1,7 +1,7 @@
-import {FormikValues} from "formik";
 import * as Yup from "yup";
+import {CreateTaskList} from "../../../models/taskLists.ts";
 
-export const initialValue: FormikValues = {
+export const initialValue: CreateTaskList = {
     title: '',
 };
 

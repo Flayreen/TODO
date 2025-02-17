@@ -1,9 +1,9 @@
-import { signOut, getAuth, UserCredential } from "firebase/auth";
-import app from '../firebaseConfig.ts';
+import { signOut, getAuth } from "firebase/auth";
+import {app} from '../firebaseConfig.ts';
 
 const auth = getAuth(app);
 
-export const logOut = async (): Promise<UserCredential> => {
+export const logOut = async (): Promise<void> => {
     try {
         return await signOut(auth)
             .then(() => {

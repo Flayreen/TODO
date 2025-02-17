@@ -1,5 +1,5 @@
-import React, {useContext, useState} from "react";
-import {Formik, Form, Field, ErrorMessage, FormikValues} from "formik";
+import React, {useState} from "react";
+import {Formik, Form, FormikValues} from "formik";
 import {initialValue, validationSchema} from "./constants.ts";
 import Button from "../../components/Button/Button.tsx";
 import TextField from "../../components/TextField/TextField.tsx";
@@ -14,7 +14,6 @@ const Login: React.FC = () => {
     const {login} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>('');
 
     const handleSubmit = async (values: FormikValues) => {
         setLoading(true);
@@ -24,7 +23,6 @@ const Login: React.FC = () => {
             login(token);
             navigate("/");
         } catch (error: any) {
-            setError(error.message);
             alert("Невірний логін або пароль");
         } finally {
             setLoading(false);
@@ -42,7 +40,7 @@ const Login: React.FC = () => {
                 validateOnBlur={false}
                 validateOnChange={false}
             >
-                {({ isSubmitting}) => (
+                {() => (
                     <Form className="mb-5">
                         <div className="mb-5">
                             <TextField

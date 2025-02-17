@@ -1,4 +1,4 @@
-import {Navigate, Outlet, Route} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.tsx";
 import Home from "../pages/Home/Home.tsx";
 import React from "react";

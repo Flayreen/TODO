@@ -9,7 +9,6 @@ import {WebRoutes} from "../../routes/routes.ts";
 
 const Registration: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>('');
     const navigate = useNavigate();
 
     const handleSubmit = async (values: FormikValues) => {
@@ -21,7 +20,6 @@ const Registration: React.FC = () => {
             navigate(WebRoutes.Login)
         } catch (error: any) {
             console.log(error)
-            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -38,7 +36,7 @@ const Registration: React.FC = () => {
                 validateOnBlur={false}
                 validateOnChange={false}
             >
-                {({ isSubmitting}) => (
+                {() => (
                     <Form className="mb-5">
                         <div className="mb-5">
                             <TextField

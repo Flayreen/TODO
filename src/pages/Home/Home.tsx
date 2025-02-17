@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../../components/Header/Header.tsx";
 
 import TodoListItem from "../../components/TodoListItem/TodoListItem.tsx";
@@ -6,15 +6,25 @@ import Todo from "../../components/Todo/Todo.tsx";
 import {useAuth} from "../../hooks/useAuth.tsx";
 import {UserRole} from "../../models/user.ts";
 import CreateListDialog from "./CreateListDialog/CreateListDialog.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store/store.ts";
+import {fetchTaskLists} from "../../store/slices/taskListSlice.ts";
 
 const Home: React.FC = () => {
     const {user} = useAuth();
     const isAdmin: boolean = user?.role === UserRole.Admin;
     const [isCreateList, setIsCreateList] = useState<boolean>(false);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const {taskLists} = useSelector((state: RootState) => state.taskList)
 
     const openCreateListModal = (): void => {
         setIsCreateList(true)
     }
+
+    useEffect(() => {
+        dispatch(fetchTaskLists());
+    }, [dispatch])
 
     return (
         <>
@@ -28,16 +38,14 @@ const Home: React.FC = () => {
                         </button>
                     ) : null}
 
-                    <TodoListItem title="Title">
-                        {isAdmin ? (
-                            <button type="button" className="w-full p-2 text-md text-purple-700 font-medium border-dashed border-1 border-purple-300 rounded-lg bg-purple-500/10 mb-2 hover:bg-purple-500/20 cursor-pointer">
-                                Створити нову задачу
-                            </button>
-                        ) : null}
-
-                        <Todo title={"Title"} description="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga."/>
-                        <Todo title={"Title"} />
-                    </TodoListItem>
+                    {taskLists.map((data: any, index: any) => (
+                        <TodoListItem
+                            title={data.title}
+                            key={index}
+                        >
+                            <Todo title={"Title"} description="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga."/>
+                        </TodoListItem>
+                    ))}
                 </div>
             </div>
 

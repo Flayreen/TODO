@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './App.css'
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Login from "./pages/Login/Login.tsx";
@@ -7,12 +7,12 @@ import NotFound from "./pages/NotFound/NotFound.tsx";
 import {AuthProvider} from "./context/AuthContext.tsx";
 import ProtectedRoute from "./routes/ProtectedRoute.tsx";
 import {WebRoutes} from "./routes/routes.ts";
-// import {Provider} from "react-redux";
-// import {store} from "./store/store.ts";
+import {Provider} from "react-redux";
+import {store} from "./store/store.ts";
 
 const App = () => {
   return (
-      // <Provider store={store}>
+      <Provider store={store}>
           <AuthProvider>
             <Router>
               <Routes>

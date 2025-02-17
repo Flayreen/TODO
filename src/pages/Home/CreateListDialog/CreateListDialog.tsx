@@ -1,25 +1,30 @@
-import React, { useState } from "react";
-import {Form, Formik, FormikValues} from "formik";
+import React from "react";
+import {Form, Formik} from "formik";
 import {initialValue, validationSchema} from "./constants.ts";
 import TextField from "../../../components/TextField/TextField.tsx";
 import Button from "../../../components/Button/Button.tsx";
 import {useDispatch} from "react-redux";
-// import {AppDispatch} from "../../../store/store.ts";
-// import {createTaskList} from "../../../store/slices/taskListSlice.ts";
+import {AppDispatch} from "../../../store/store.ts";
+import {createTaskList} from "../../../store/slices/taskListSlice.ts";
+import {CreateTaskList} from "../../../models/taskLists.ts";
 
 interface ICreateListDialog {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const CreateListDialog: React.FC<ICreateListDialog> = ({ isOpen, onClose, onSubmit }) => {
-    // const dispatch = useDispatch<AppDispatch>();
-
+const CreateListDialog: React.FC<ICreateListDialog> = ({ isOpen, onClose }) => {
+    const dispatch = useDispatch<AppDispatch>();
 
     if (!isOpen) return null;
 
-    const handleSubmit = async (values: FormikValues) => {
-        // await dispatch(createTaskList())
+    const handleSubmit = async (values: CreateTaskList) => {
+        try {
+            await dispatch(createTaskList(values));
+            onClose();
+        } catch (e) {
+            console.log(e)
+        }
     };
 
     return (
@@ -33,26 +38,28 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ isOpen, onClose, onSubm
                     validateOnBlur={false}
                     validateOnChange={false}
                 >
-                    <Form onSubmit={handleSubmit}>
-                        <TextField
-                            name="title"
-                            type="text"
-                            label="Назва списку"
-                            placeholder="Введіть назву списку"
-                        />
+                    {() => (
+                        <Form>
+                            <TextField
+                                name="title"
+                                type="text"
+                                label="Назва списку"
+                                placeholder="Введіть назву списку"
+                            />
 
-                        <div className="flex justify-end space-x-2 mt-4">
-                            <Button
-                                type="button"
-                                text="Закрити"
-                                onClick={onClose}
-                            />
-                            <Button
-                                // type="submit"
-                                text="Створити"
-                            />
-                        </div>
-                    </Form>
+                            <div className="flex justify-end space-x-2 mt-4">
+                                <Button
+                                    type="button"
+                                    text="Закрити"
+                                    onClick={onClose}
+                                />
+                                <Button
+                                    type="submit"
+                                    text="Створити"
+                                />
+                            </div>
+                        </Form>
+                    )}
                 </Formik>
             </div>
         </div>
